@@ -10,8 +10,25 @@ module RSpec
 
         run_context = ::Chef::RunContext.new(node, cookbook_collection)
 
+        run_list = ::Chef::RunList.new(cookbook_name)
+        silently do
+          run_context.load(run_list.expand('_default'))
+        end
+
         cookbook = run_context.cookbook_collection[recipe_name[0]]
         cookbook.load_recipe(recipe_name[1], run_context)
+      end
+
+      private
+
+      def silently
+        begin
+          verbose = $VERBOSE
+          $VERBOSE = nil
+          yield
+        ensure
+          $VERBOSE = verbose
+        end
       end
     end
   end

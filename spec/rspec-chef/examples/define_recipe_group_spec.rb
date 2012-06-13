@@ -12,3 +12,9 @@ describe "foo::install", :type => :recipe do
 
   it { should contain_remote_file('/tmp/foo').with(:source, 'base_remote').with(:mode, 0755) }
 end
+
+describe "foo::lwrp", :type => :recipe do
+  let(:cookbook_path) { COOKBOOKS }
+
+  it { should contain_foo_bar('test').with(:action, [:run]) }
+end
