@@ -75,6 +75,24 @@ Use the chained method `without` to the the resource doesn't get further unexpec
 
 ## Settings
 
+*Log level*
+
+The Chef log level can be specified using `let` for each group:
+
+```ruby
+describe 'foo::bar' do
+  let(:log_level) { :debug }
+end
+```
+
+Or it can be set as a global RSpec setting:
+
+```ruby
+RSpec.configure do |c|
+  c.log_level = :debug
+end
+```
+
 *Cookbooks path*
 
 The path to the cookbooks can be specified using `let` for each group:

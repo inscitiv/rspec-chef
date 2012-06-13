@@ -14,4 +14,5 @@ end
 RSpec.configure do |c|
   c.add_setting :cookbook_path,   :default => '/etc/chef/recipes'
   c.add_setting :json_attributes, :default => {}
+  c.add_setting :log_level,       :default => :warn
 end
