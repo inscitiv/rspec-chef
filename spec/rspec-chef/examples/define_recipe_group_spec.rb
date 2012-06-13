@@ -4,6 +4,7 @@ describe "foo", :type => :recipe do
   let(:cookbook_path) { COOKBOOKS }
 
   it { subject.should contain_remote_file('/tmp/foo') }
+  it { subject.should_not contain_remote_file('/tmp/bar') }
 end
 
 describe "foo::install", :type => :recipe do

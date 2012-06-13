@@ -22,7 +22,10 @@ module RSpec
           lookup = @type
           lookup << "[#{@name.to_s}]" if @name
 
-          resource = recipe.resources(lookup)
+          begin
+            resource = recipe.resources(lookup)
+          rescue ::Chef::Exceptions::ResourceNotFound
+          end
           return false unless resource
 
           matches = true
@@ -56,6 +59,10 @@ module RSpec
 
         def failure_message_for_should
           %Q{expected that the recipe would #{description}#{errors}}
+        end
+
+        def negative_failure_message
+          %Q{expected that the recipe would not #{description}#{errors}}
         end
 
         def errors
