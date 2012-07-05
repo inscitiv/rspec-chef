@@ -6,10 +6,10 @@ module RSpec
       include ChefSupport
 
       def subject
-        @recipe ||= recipe
+        @run_context ||= run_context
       end
 
-      def recipe
+      def run_context
         ::Chef::Log.level = self.respond_to?(:log_level) ? log_level : RSpec.configuration.log_level
 
         path = self.respond_to?(:cookbook_path) ? cookbook_path : RSpec.configuration.cookbook_path

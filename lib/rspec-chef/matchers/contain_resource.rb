@@ -18,14 +18,34 @@ module RSpec
           @errors                = []
         end
 
-        def matches?(recipe)
-          lookup = @type
-          lookup << "[#{@name.to_s}]" if @name
-
-          begin
-            resource = recipe.resources(lookup)
-          rescue ::Chef::Exceptions::ResourceNotFound
+        def matches?(other)
+          if other.is_a?(::Chef::Resource)
+            type = if @type.is_a?(Class)
+              @type
+            else
+              ::Chef::Resource.const_get ::Chef::Mixin::ConvertToClassName.convert_to_class_name(@type)
+            end
+            
+            resource = other if other.is_a?(type) && other.name == @name
+          else
+            lookup = @type.dup
+            lookup << "[#{@name.to_s}]" if @name
+  
+            require 'chef/run_context'
+            run_context = if other.is_a?(::Chef::RunContext)
+              other
+            elsif other.respond_to?(:run_context)
+              other.run_context 
+            end
+            
+            return false unless run_context
+            
+            begin
+              resource = run_context.resource_collection.find(lookup)
+            rescue ::Chef::Exceptions::ResourceNotFound
+            end
           end
+          
           return false unless resource
 
           matches = true
@@ -58,11 +78,11 @@ module RSpec
         end
 
         def failure_message_for_should
-          %Q{expected that the recipe would #{description}#{errors}}
+          %Q{expected that the run_context would #{description}#{errors}}
         end
 
         def negative_failure_message
-          %Q{expected that the recipe would not #{description}#{errors}}
+          %Q{expected that the run_context would not #{description}#{errors}}
         end
 
         def errors

@@ -14,9 +14,8 @@ module RSpec
         silently do
           run_context.load(run_list.expand('_default'))
         end
-
-        cookbook = run_context.cookbook_collection[recipe_name[0]]
-        cookbook.load_recipe(recipe_name[1], run_context)
+        
+        run_context
       end
 
       private
