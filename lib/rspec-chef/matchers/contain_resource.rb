@@ -43,6 +43,7 @@ module RSpec
             begin
               resource = run_context.resource_collection.find(lookup)
             rescue ::Chef::Exceptions::ResourceNotFound
+              @errors << "#{lookup} not found in #{run_context.cookbook_collection.all_resources.collect(&:description).join(", ")}"
             end
           end
           
