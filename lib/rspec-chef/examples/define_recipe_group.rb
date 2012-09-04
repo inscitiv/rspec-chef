@@ -16,7 +16,7 @@ module RSpec
         dna = json(self.respond_to?(:json_attributes) ? json_attributes : RSpec.configuration.json_attributes)
         
         cookbook_name = self.class.top_level_description.downcase
-        lookup_recipe(cookbook_name, path, dna)
+        load_context(cookbook_name, path, dna)
       end
     end
   end

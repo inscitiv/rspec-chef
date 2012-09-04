@@ -94,11 +94,11 @@ describe RSpec::Chef::Matchers::ContainResource do
   it "includes a description" do
     matcher = described_class.new(:contain_remote_file, :foo)
 
-    matcher.description.should == %q{include Resource[remote_file @name="foo"]}
+    matcher.description.should == %q{remote_file("foo")}
   end
 
   it "includes a message for should failure" do
     matcher = described_class.new(:contain_remote_file, :foo)
-    matcher.failure_message_for_should.should == %q{expected that the recipe would include Resource[remote_file @name="foo"]}
+    matcher.failure_message_for_should.should == %q{expected remote_file("foo")}
   end
 end

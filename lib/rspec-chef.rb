@@ -11,6 +11,18 @@ module RSpec
   end
 end
 
+class Chef::Resource
+  def description
+    [ self.class.name, [ '[', self.name, ']' ].join ].join
+  end
+end
+
+class Chef::RunContext
+  def description
+    self.class.name
+  end
+end
+
 RSpec.configure do |c|
   c.add_setting :cookbook_path,   :default => '/etc/chef/recipes'
   c.add_setting :json_attributes, :default => {}
