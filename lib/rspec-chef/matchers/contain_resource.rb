@@ -55,8 +55,22 @@ module RSpec
           end
           
           return false unless resource
+          
+          provider = resource.provider
+          unless provider
+            provider = ::Chef::Platform.find_provider_for_node(resource.run_context.node, resource)
+          end
 
           matches = true
+          
+          if @provider
+            # These classes get re-loaded and re-defined so expecting them to compare == is not realistic
+            unless provider.name == @provider.name
+              @errors << "provider expected to be #{@provider} but it is actually #{provider}"
+              matches = false
+            end
+          end
+          
           @params.each do |key, value|
             unless (real_value = resource.params[key.to_sym]) == value
               @errors << "#{key} expected to be #{value} but it is actually #{real_value}"
@@ -98,7 +112,11 @@ module RSpec
         end
 
         def with(attribute, value)
-          @expected_attributes[attribute] = value
+          if attribute.to_sym == :provider
+            @provider = value
+          else
+            @expected_attributes[attribute] = value
+          end
           self
         end
 
