@@ -24,7 +24,9 @@ module RSpec
         node = ::Chef::Node.new
         node.consume_attributes(dna)
 
-        run_context = ::Chef::RunContext.new(node, cookbook_collection)
+        formatter = ::Chef::Formatters.new(::Chef::Config.formatter, STDOUT, STDERR)
+        events = ::Chef::EventDispatch::Dispatcher.new(formatter)
+        run_context = ::Chef::RunContext.new(node, cookbook_collection, events)
 
         run_list = ::Chef::RunList.new(cookbook_name)
         silently do
