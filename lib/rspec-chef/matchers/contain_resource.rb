@@ -72,7 +72,7 @@ module RSpec
           end
           
           @params.each do |key, value|
-            unless (real_value = resource.params[key.to_sym]) == value
+            unless (real_value = (resource.params||{})[key.to_sym]) == value
               @errors << "#{key} expected to be #{value} but it is actually #{real_value}"
               matches = false
             end
@@ -91,7 +91,7 @@ module RSpec
               matches = false
             end
           end
-
+          
           matches
         end
 
